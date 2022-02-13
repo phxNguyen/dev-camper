@@ -1,22 +1,23 @@
 const express = require('express');
 const dotenv = require('dotenv');
-cosnt morgan = require('morgan')
-
-//Route files
-const bootcamps = require('./routes/bootcamps')
-
-//Logger files
-const logger = require('./middleware/logger')
-
+const morgan = require('morgan');
 
 //loading env config
 dotenv.config({ path: './config/config.env' });
 const app = express();
 
-// su dung router
-app.use('/api/v1/bootcamps',bootcamps)
+//Route files
+const bootcamps = require('./routes/bootcamps');
 
-app.use(logger)
+//Logger files
+const logger = require('./middleware/logger');
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+// su dung router
+app.use('/api/v1/bootcamps', bootcamps);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
