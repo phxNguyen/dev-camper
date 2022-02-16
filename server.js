@@ -1,11 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-
+const connectDB = require('./database/dbConnection')
 //loading env config
 dotenv.config({ path: './config/config.env' });
 const app = express();
 
+// Connect to DB
+connectDB();
 //Route files
 const bootcamps = require('./routes/bootcamps');
 
@@ -27,5 +29,11 @@ app.listen(PORT, () => {
 });
 
 
+//=======Cai nay dung` lai server khi gap loi, nguyen ly hoat dong thi ntn chua biet :P ========//
 
-// TESTING  ahi
+process
+
+
+
+
+
