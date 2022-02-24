@@ -4,8 +4,11 @@ const morgan = require('morgan');
 const connectDB = require('./database/dbConnection')
 //loading env config
 dotenv.config({ path: './config/config.env' });
+
 const app = express();
 
+// Body parser
+app.use(express.json());
 // Connect to DB
 connectDB();
 //Route files
@@ -31,7 +34,7 @@ app.listen(PORT, () => {
 
 //=======Cai nay dung` lai server khi gap loi, nguyen ly hoat dong thi ntn chua biet :P ========//
 
-process
+
 
 
 
