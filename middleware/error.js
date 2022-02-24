@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const ErrorResponse = require("../utils/errorResponse");
 
 const errorHandler = (err, req, res, next) =>{
@@ -17,6 +18,13 @@ const errorHandler = (err, req, res, next) =>{
   res.status(error.statusCode || 500).json({
     success: false,
     error: error.message || 'Server Error'
+=======
+const errorHandler = (err, req, res, next) =>{
+  console.log(err.stack);
+  res.status(500).json({
+    success: false,
+    error: err.message
+>>>>>>> dbc5554f83284a9ebe7236917c703869c963a602
   });
 }
 
