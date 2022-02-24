@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const connectDB = require('./database/dbConnection')
+const errorHandler = require('./middleware/error')
 //loading env config
 dotenv.config({ path: './config/config.env' });
 
@@ -23,6 +24,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // su dung router
 app.use('/api/v1/bootcamps', bootcamps);
+
+// error handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
