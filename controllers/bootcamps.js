@@ -6,7 +6,50 @@ const asyncHandler = require('../middleware/async')
 // @access    Public
 exports.getBootcamps = asyncHandler(async(req,res,next)=>{
   
-  const bootcamps = await Bootcamps.find();
+
+  // Copy req.query
+  const reqQuery = {...req.query};
+
+  // Bo phan select de query dc
+  const removeFields = ['select', 'sort'];
+
+  // Loop over removeFields and delete them from reqQuery
+  removeFields.forEach(param => delete reqQuery[param]);
+
+  //chuyen doi query parameter trong URL qua String de manipulate
+  let queryString = JSON.stringify(req.query);
+
+  // Regex bat dau double foward slash, \b la search pattern
+  // g(global) o cuoi de tim toan bo trong document, khong dung lai o tim kiem dau tien
+  // $match la MongoDB syntax 
+  // src: https://docs.mongodb.com/manual/reference/operator/query-comparison/
+  // `${}` template literal
+  queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+  // Finding resource
+  let query = Bootcamps.find(JSON.parse(queryString));
+
+  // Select Fields
+  // src: https://mongoosejs.com/docs/queries.html
+  // keyword: select
+  if(req.query.select){
+    const fields = req.query.select.split(',').join(' ');  //split chuyen tu query => array, join chuyen tu array => string
+    query = query.select(fields);
+
+  }
+
+  // Sort
+  // src: https://mongoosejs.com/docs/queries.html
+  // keyword: sort
+  
+  if(req.query.sort){
+    const sortBy = req.query.sort.split(',').join(' ');
+    query = query.sort(sortBy);
+  }else{
+    query = query.sort('-createdAt')
+  }
+  //Executing query 
+  const bootcamps = await query;
   res
     .status(200)
     .json({success:true, count:bootcamps.length, data:bootcamps})
