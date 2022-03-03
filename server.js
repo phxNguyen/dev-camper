@@ -10,10 +10,13 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+
 // Connect to DB
 connectDB();
+
 //Route files
 const bootcamps = require('./routes/bootcamps');
+const courses = require('./routes/courses');
 
 //Logger files
 const logger = require('./middleware/logger');
@@ -24,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // su dung router
 app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/courses', courses);
 
 // error handler
 app.use(errorHandler);
@@ -37,7 +41,6 @@ app.listen(PORT, () => {
 
 
 //=======Cai nay dung` lai server khi gap loi, nguyen ly hoat dong thi ntn chua biet :P ========//
-
 
 
 

@@ -1,7 +1,10 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
+//Load model
 const Bootcamp = require('./database/models/Bootcamps');
+const Course = require('./database/models/Course')
 
 //load env 
 dotenv.config({path:'./config/config.env'});
@@ -26,11 +29,12 @@ dotenv.config({path:'./config/config.env'});
 
 // read JSON files
 const bootcampsData = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8'))
-
+const coursesData = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8'))
 // Import into DB
 const importData = async()=>{
   try{
     await Bootcamp.create(bootcampsData);
+    await Course.create(coursesData);
     console.log('Data Imported...');
     process.exit();
   }catch(err){
@@ -42,6 +46,7 @@ const importData = async()=>{
 const deleteData = async()=>{
   try{
     await Bootcamp.deleteMany();
+    await Course.deleteMany();
     console.log('Data Deleted...');
     process.exit();
   }catch(err){
