@@ -1,6 +1,7 @@
 const Bootcamps = require("../database/models/Bootcamps");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
+
 // @desc    Get all bootcamps
 // @route   GET /api/v1/bootcamps
 // @access    Public
@@ -28,7 +29,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   );
 
   // Finding resource
-  let query = Bootcamps.find(JSON.parse(queryString));
+  let query = Bootcamps.find(JSON.parse(queryString)).populate('courses');
 
   // Select Fields
   // src: https://mongoosejs.com/docs/queries.html
@@ -51,7 +52,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
   //Pagination
   const page = parseInt(req.query.page, 10) || 1; // Thu tu trang
-  const limit = parseInt(req.query.limit, 10) || 1; //Gioi han moi trang
+  const limit = parseInt(req.query.limit, 10) || 10; //Gioi han moi trang
   const startIndex = (page - 1) * limit; // Item bat dau moi trang (skip cac trang truoc)
 
   const endIndex = page * limit; // hien thi cac trang...
@@ -103,7 +104,6 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @desc    Create new bootcamps
 // @route   POST /api/v1/bootcamps/
 // @access  Private
-
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamps.create(req.body);
   res.status(201).json({ success: true, data: bootcamp });
@@ -112,7 +112,6 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 // @desc    Update bootcamp
 // @route   PUT /api/v1/bootcamps/:id
 // @access  Private
-
 exports.updateBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamps.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -140,6 +139,6 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
     );
   }
-
+  bootcamp.remove();// trigger cascade delete middleware
   res.status(200).json({ success: true, data: {} });
 });
