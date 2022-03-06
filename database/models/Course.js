@@ -35,7 +35,8 @@ const CourseSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Bootcamp',
     required: true
-  }
+  },
+   
 });
 
 module.exports = mongoose.model("Course",CourseSchema);

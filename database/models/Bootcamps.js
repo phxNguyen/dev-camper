@@ -102,9 +102,11 @@ const BootcampSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-},{
-  toJSON:{virtual:true},
-  toObject:{virtual: true}
+},
+  //virtual populate
+  {
+  toJSON: {virtuals:true},
+  toObject: {virtuals: true}
 });
 
 // create bootcamp slug
@@ -139,11 +141,12 @@ BootcampSchema.pre("save", async function (next) {
 });
 
 // Reverse populate with virtuals
+// src ref: https://mongoosejs.com/docs/tutorials/virtuals.html 
+// keyword: populate 
 BootcampSchema.virtual('courses',{
   ref: 'Course', //ref to model
   localField:'_id',
   foreignField:'bootcamp',
   justOne: false
-
 })
 module.exports = mongoose.model('Bootcamp', BootcampSchema);

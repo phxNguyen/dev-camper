@@ -9,7 +9,7 @@ const {getBootcamps,
 // Include other resource routers
 const courseRouter = require('./courses');
 
-// Re-route into other resource routers
+// Re-route into other resource routers, fowarding
 router.use('/:bootcampId/courses', courseRouter);
 
 router
