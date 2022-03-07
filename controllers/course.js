@@ -1,6 +1,7 @@
 const Course = require("../database/models/Course");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
+const Bootcamp = require("../database/models/Bootcamps")
 
 // @desc    Get courses
 // @route   GET /api/v1/courses
@@ -55,13 +56,14 @@ exports.getCourse= asyncHandler(async (req, res, next) => {
 
 exports.addCourse= asyncHandler(async (req, res, next) => {
   
-  req.body.bootcamp= req.params.bootcampId;
-  req.body.user = req.user.id;
-  const bootcamp = await Course.findById(req.params.bootcampId);
+  req.body.bootcamp = req.params.bootcampId;
+  // req.body.user = req.user.id;
+
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
   if(!bootcamp){
     return next(
-      new ErrorResponse(`No bootcamp with the ${req.params.bootcampId}`)
+      new ErrorResponse(`No bootcamp with the ${req.params.bootcampId}`), 404
     )
   }
 
