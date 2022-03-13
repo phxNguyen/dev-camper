@@ -2,7 +2,6 @@ const path = require("path");
 const Bootcamps = require("../database/models/Bootcamps");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
-const multer = require("multer");
 
 // @desc    Get all bootcamps
 // @route   GET /api/v1/bootcamps
@@ -91,7 +90,7 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Please upload an image file`, 400));
   }
 
-  // Check filesize
+  // Check file size
   if (file.size > process.env.MAX_FILE_UPLOAD) {
     return next(
       new ErrorResponse(

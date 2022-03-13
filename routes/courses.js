@@ -3,6 +3,7 @@ const router = express.Router({mergeParams: true});
 const Course = require('../database/models/Course');
 const {getCourses, getCourse, addCourse, updateCourse,deleteCourse}   = require('../controllers/course');
 const advancedResults = require('../middleware/advancedResults');
+const {protect} = require('../middleware/auth')
 
 router
   .route('/')
@@ -10,14 +11,14 @@ router
     path:'bootcamp',
     select: 'name description'
   }),getCourses)
-  .post(addCourse);
+  .post(protect, addCourse);
   
 router
   .route('/:id')
   .get(getCourse)
   .post(addCourse)
-  .put(updateCourse)
-  .delete(deleteCourse)
+  .put(protect, updateCourse)
+  .delete(protect, deleteCourse)
   
 
 module.exports = router;
