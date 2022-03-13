@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true});
 const Course = require('../database/models/Course');
 const {getCourses, getCourse, addCourse, updateCourse,deleteCourse}   = require('../controllers/course');
 const advancedResults = require('../middleware/advancedResults');
-const {protect} = require('../middleware/auth')
+const {protect, authorize} = require('../middleware/auth')
 
 router
   .route('/')
@@ -16,9 +16,9 @@ router
 router
   .route('/:id')
   .get(getCourse)
-  .post(addCourse)
-  .put(protect, updateCourse)
-  .delete(protect, deleteCourse)
+  .post(protect,authorize('publisher','admin'), addCourse)
+  .put(protect,authorize('publisher','admin'), updateCourse)
+  .delete(protect,authorize('publisher','admin'), deleteCourse)
   
 
 module.exports = router;

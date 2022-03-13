@@ -9,7 +9,7 @@ const {
   bootcampPhotoUpload,
 } = require("../controllers/bootcamps");
 
-const { protect } = require("../middleware/auth");
+const { protect, authorize} = require("../middleware/auth");
 
 const advancedResults = require("../middleware/advancedResults");
 const Bootcamp = require("../database/models/Bootcamps");
@@ -20,17 +20,19 @@ const courseRouter = require("./courses");
 router.use("/:bootcampId/courses", courseRouter);
 
 //Upload photo
-router.route("/:id/photo").put(protect, bootcampPhotoUpload);
+router
+  .route("/:id/photo")
+  .put(protect, authorize('publisher','admin'),bootcampPhotoUpload);
 
 router
   .route("/")
   .get(advancedResults(Bootcamp, "courses"), getBootcamps)
-  .post(protect, createBootcamp);
+  .post(protect,authorize('publisher','admin'), createBootcamp);
 
 router
   .route("/:id")
   .get(getBootcamp)
-  .put(protect, updateBootcamp)
-  .delete(protect, deleteBootcamp);
+  .put(protect, authorize('publisher','admin'),  updateBootcamp)
+  .delete(protect, authorize('publisher', 'admin'), deleteBootcamp);
 
 module.exports = router;
